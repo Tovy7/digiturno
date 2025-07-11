@@ -1,4 +1,4 @@
-name: Dependency Check (Docker + Safe Exit + Todos los formatos)
+name: Dependency Check (Docker + Safe Exit + NPM Install)
 
 on:
   push:
@@ -15,10 +15,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18  # Cambia si usas otra versión
+
+      - name: Install dependencies
+        working-directory: ./frontend/digiturno-app
+        run: npm install
+
       - name: Create report output directory
         run: mkdir -p dependency-check-report
 
-      - name: Run Dependency-Check using Docker (con todos los formatos)
+      - name: Run Dependency-Check using Docker
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
@@ -38,4 +47,3 @@ jobs:
         with:
           name: dependency-check-report
           path: dependency-check-report
-
