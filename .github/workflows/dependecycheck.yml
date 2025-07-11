@@ -1,0 +1,32 @@
+name: Dependency Check (Docker)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  dependency-check:
+    name: Run OWASP Dependency-Check with Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Dependency-Check using Docker
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/src \
+            owasp/dependency-check \
+            --project "Mi-Proyecto" \
+            --scan /src \
+            --format "HTML" \
+            --out /src/dependency-check-report
+
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: dependency-check-report
