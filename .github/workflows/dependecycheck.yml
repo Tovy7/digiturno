@@ -1,4 +1,4 @@
-name: Dependency Check (Docker + API Key + Safe Exit)
+name: Dependency Check (Docker + Safe Exit)
 
 on:
   push:
@@ -14,6 +14,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Create report output directory
+        run: mkdir -p dependency-check-report
 
       - name: Run Dependency-Check using Docker (no fail on CVEs)
         env:
