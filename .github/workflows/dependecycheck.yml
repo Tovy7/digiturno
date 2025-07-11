@@ -1,4 +1,4 @@
-name: Dependency Check (Docker + Safe Exit)
+name: Dependency Check (Docker + Safe Exit + Todos los formatos)
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
       - name: Create report output directory
         run: mkdir -p dependency-check-report
 
-      - name: Run Dependency-Check using Docker (no fail on CVEs)
+      - name: Run Dependency-Check using Docker (con todos los formatos)
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
@@ -28,13 +28,14 @@ jobs:
             owasp/dependency-check \
             --project "Mi-Proyecto" \
             --scan /src \
-            --format "HTML" \
+            --format "ALL" \
             --out /src/dependency-check-report \
             --nvdApiKey $NVD_API_KEY \
             --failOnCVSS 11
 
-      - name: Upload report as artifact
+      - name: Upload all reports
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
           path: dependency-check-report
+
